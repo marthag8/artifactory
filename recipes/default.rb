@@ -58,7 +58,21 @@ end
 
 template "/usr/local/artifactory/tomcat/conf/server.xml" do
 	mode 00644
-	notifies :restart, "runit_service[artifactory]"
+  case node['artifactory']['init_style']
+  when "runit"
+    notifies :restart, "runit_service[artifactory]"
+     else
+    notifies :restart, "service[artifactory]"
+  end
 end
 
-runit_service "artifactory"
+case node['artifactory']['init_style']
+when "runit"
+  runit_service "artifactory"
+else
+  execute "/usr/local/artifactory/bin/installService.sh" do
+    creates "/etc/init.d/artifactory"
+  end
+
+  service "artifactory"
+end
