@@ -1,5 +1,22 @@
 <VirtualHost *:80>
 	ServerName <%= @host_name %>
+<% if node['artifactory']['use_ssl'] %>
+	Redirect permanent / https://<%= node['fqdn'] %>/
+</VirtualHost>
+
+<VirtualHost *:443>
+	ServerName <%= @host_name %>
+
+	SSLEngine On
+	SSLCertificateFile <%= node['apache']['dir'] %>/ssl/<%= node['artifactory']['cert_name'] %>.crt
+	SSLCertificateKeyFile <%= node['apache']['dir'] %>/ssl/<%= node['artifactory']['cert_name'] %>.key
+<% unless node['artifactory']['cert_ca_name'].nil? %>
+	SSLCertificateChainFile <%= node['apache']['dir'] %>/ssl/<%= node['artifactory']['cert_ca_name'] %>.crt
+<% end %>
+	SSLProxyEngine On
+<% end %>
+	Redirect permanent / https://<%= node['fqdn'] %>/artifactory/
+
 	ProxyPass / http://localhost:<%=node["artifactory"]["port"] %>/
 	ProxyPassReverse / http://localhost:<%=node["artifactory"]["port"] %>/
 	ProxyRequests Off

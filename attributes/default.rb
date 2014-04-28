@@ -11,4 +11,7 @@ default["artifactory"]["user"] = "artifactory"
 default["artifactory"]["port"] = 8081
 default["artifactory"]["shutdown_port"] = 8015
 default["artifactory"]["init_style"] = "runit"
+default["artifactory"]["use_ssl"] = false
+default["artifactory"]["cert_cookbook"] = "artifactory"
+default["artifactory"]["cert_name"] = node["fqdn"]
 
