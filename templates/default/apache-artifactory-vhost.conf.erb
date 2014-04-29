@@ -1,7 +1,7 @@
 <VirtualHost *:80>
 	ServerName <%= @host_name %>
 <% if node['artifactory']['use_ssl'] %>
-	Redirect permanent / https://<%= node['fqdn'] %>/
+	Redirect permanent / https://<%= @host_name %>/
 </VirtualHost>
 
 <VirtualHost *:443>
@@ -15,7 +15,7 @@
 <% end %>
 	SSLProxyEngine On
 <% end %>
-	Redirect permanent / https://<%= node['fqdn'] %>/artifactory/
+	Redirect permanent / https://<%= @host_name %>/artifactory/
 
 	ProxyPass / http://localhost:<%=node["artifactory"]["port"] %>/
 	ProxyPassReverse / http://localhost:<%=node["artifactory"]["port"] %>/
