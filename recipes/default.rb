@@ -9,7 +9,6 @@
 node.set["java"]["jdk_version"] = 7
 
 include_recipe "java"
-include_recipe "runit"
 package "unzip"
 
 user node["artifactory"]["user"] do
@@ -68,6 +67,7 @@ end
 
 case node['artifactory']['init_style']
 when "runit"
+  include_recipe "runit"
   runit_service "artifactory"
 else
   execute "/usr/local/artifactory/bin/installService.sh" do
